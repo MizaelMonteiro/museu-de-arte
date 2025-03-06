@@ -1,0 +1,41 @@
+
+body {
+    background-color: #f8f9fa;
+}
+
+
+main.container {
+    max-width: 800px;
+
+    margin: 80px auto 20px;
+    
+    padding: 20px;
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 100px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+}
+
+
+.btn {
+    min-width: 500px;
+
+}
+
+main div{
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+}
+
+div p {
+    text-align: center;
+}

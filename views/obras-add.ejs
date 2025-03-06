@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Museu de Arte</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link 
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+      rel="stylesheet"
+      integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
+      crossorigin="anonymous">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <link rel="stylesheet" href="/stylesheets/estilo-add.css">
+    <script>
+      $(document).ready(function () {
+        function getAutor() {
+          $.ajax({
+            url: "/autores/listardd",
+            type: "GET",
+            dataType: "json",
+            success: function (res) {
+              $("#inputAutor").html("<option selected>(Informe)</option>");
+              $.each(res.resultado, function (key, value) {
+                $("#inputAutor").append(
+                  "<option value='" + value.IdAutor  + "'>" + value.NoAutor + "</option>"
+                );
+              });
+            },
+            error: function(err){
+              console.error("Erro ao buscar autores:", err);
+            }
+          });
+        }
+
+        function getSessao() {
+          $.ajax({
+            url: "/sessoes/listardd",
+            type: "GET",
+            dataType: "json",
+            success: function (res) {
+              $("#inputSessao").html("<option selected>(Informe)</option>");
+              $.each(res.resultado, function (key, value) {
+                $("#inputSessao").append(
+                  "<option value='" + value.IdSessao  + "'>" + value.NoSessao + "</option>"
+                  
+                );
+                
+              });
+            },
+            error: function(err){
+              console.error("Erro ao buscar sessoes:", err);
+            }
+          });
+        }
+        function setAutor() {
+          $.ajax({
+            success: function (res) {
+              let autor = $("#IdAutor").val();
+              $("#inputAutor option").each(function () {
+                if ($(this).val() == autor) {
+                  $("#inputAutor option[value='" + autor + "']").attr('selected', 'selected');
+                }
+              });
+            },
+          });
+        }
+
+        function setSessao() {
+          $.ajax({
+            success: function (res) {
+              let sessao = $("#IdSessao").val();
+              $("#inputSessao option").each(function () {
+                if ($(this).val() == sessao) {
+                  $("#inputSessao option[value='" + sessao + "']").attr('selected', 'selected');
+                }
+              });
+            },
+          });
+        }
+
+        getAutor();
+        getSessao();
+        setAutor();
+        setSessao();
+      });
+
+      // Função para editar a obra via AJAX (para modo de edição)
+      function altera(IdObra) {
+        
+        $.ajax({
+          url: "/obras/edit/" + IdObra,
+          type: "PUT",
+          data: "Titulo=" + $("#inputTitulo").val() + "&Tecnica=" + $("#inputTecnica").val() + "&Ano=" + $("#inputAno").val() + "&autor=" + $("#inputAutor").val() + "&sessao=" + $("#inputSessao").val() ,
+          success: function () {
+            $(location).attr('href', '/obras/listar');  
+          }
+        });
+       
+      }
+    </script>
+  </head>
+  <body>
+
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-current="page" href="http://localhost:3000/introducao/introducao">Home</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">  <!-- Adicionando a <ul> correta -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Dados adicionais</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="http://localhost:3000/levantamentos/levantamentos">Levantamentos</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Consulta de dados
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="http://localhost:3000/autores/listar">Autores</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Obras/listar">Obras</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Sessoes/Listar">Sessões</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Exposicoes/listar">Exposições</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Visitantes/listar">Visitantes</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Funcionarios/listar">Funcionários</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <div class="container mt-4">
+      
+        
+        
+      <% if (resultado.IdObra) {%>
+            <input type="hidden" id="IdAutor" name="IdAutor" value="<%= resultado.IdAutor%>">
+            <input type="hidden" id="IdSessao" name="IdSessao" value="<%= resultado.IdSessao%>">
+            <h1>Alterar Obras</h1>
+            <form method="#" action="/obras/edit/<%= resultado.IdObra%>" class="row g-3">
+      <%} else {%>
+        <form method="post" action="/obras/add" class="row g-3">    
+          <h1>Cadastrar Obras</h1>
+          <div class="col-md-6">
+      <%}%>
+      <div>
+        <% if (resultado.IdObra) {%>
+          <label for="inputTitulo" class="form-label">Titulo da Obra</label>
+          <input type="text" class="form-control" id="inputTitulo" name="Titulo" value="<%= resultado.TituloObra%>">
+  
+  
+          <label for="inputTecnica" class="form-label">Tecnica da Obra</label>
+          <input type="text" class="form-control" id="inputTecnica" name="Tecnica"  value="<%= resultado.TecnicaObra%>">
+  
+  
+          <label for="inputAno" class="form-label">Ano da Obra</label>
+          <input type="number" class="form-control" id="inputAno" name="Ano" value="<%= resultado.AnoObra%>">
+        <%} else {%>
+            <label for="inputTitulo" class="form-label">Titulo da Obra</label>
+            <input type="text" class="form-control" id="inputTitulo" name="Titulo" placeholder="Titulo da Obra">
+    
+    
+            <label for="inputTecnica" class="form-label">Tecnica da Obra</label>
+            <input type="text" class="form-control" id="inputTecnica" name="Tecnica" placeholder="Tecnica usada na obra">
+    
+    
+            <label for="inputAno" class="form-label">Ano da Obra</label>
+            <input type="number" class="form-control" id="inputAno" name="Ano" placeholder="Ano de criação da obra">
+          <%}%>
+              
+      
+      </div>
+                        
+      <div class="col-md-6">
+        <label for="inputAutor" class="form-label">Autor da Obra</label>
+        <select id="inputAutor" class="form-select" name="autor">
+          <option selected>(Informe)</option>
+        </select>
+      </div>
+            
+      <div class="col-md-6">
+        <label for="inputSessao" class="form-label">Sessao da Obra</label>
+        <select id="inputSessao" class="form-select" name="sessao">
+          <option selected>(Informe)</option>
+        </select>
+      </div>
+      
+      <div class="col-12">
+        <% if (resultado.IdObra) {%>
+          <button type="button" onclick="altera(<%= resultado.IdObra%>);"
+            class="btn btn-primary">Salvar</button>
+        <%} else {%>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        <%}%>
+      </div>
+
+
+      </form>
+
+          
+
+          
+          
+
+
+
+      </div>
+    <script 
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+      integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" 
+      crossorigin="anonymous">
+    </script>
+  </body>
+</html>

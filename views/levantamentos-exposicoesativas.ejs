@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <title>Exposições Ativas</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
+    crossorigin="anonymous">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" href="#">Início</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
+              data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" 
+              aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link active" href="#">Exposições Ativas</a>
+          </li>
+          <!-- Outras opções, se necessário -->
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container" style="margin-top: 80px;">
+    <h1 class="mb-4">Lista de Exposições</h1>
+    <table class="table table-bordered">
+      <thead>
+        <tr>
+          <th>Título</th>
+          <th>Duração</th>
+          <th>Data de Início</th>
+          <th>Data de Encerramento</th>
+          <th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% resultado.forEach(function(exp) { %>
+          <tr>
+            <td><%= exp.TituloExposicao %></td>
+            <td><%= exp.DuracaoExposicao %></td>
+            <td>
+              <% if(exp.DuracaoExposicao.trim().toLowerCase() === 'permanente') { %>
+                -
+              <% } else { %>
+                <%= exp.dtInicioFormatada %>
+              <% } %>
+            </td>
+            <td>
+              <% if(exp.DuracaoExposicao.trim().toLowerCase() === 'permanente') { %>
+                -
+              <% } else { %>
+                <%= exp.dtFimFormatada %>
+              <% } %>
+            </td>
+            <td>
+              <% if(exp.DuracaoExposicao.trim().toLowerCase() === 'permanente') { %>
+                Sempre ativa
+              <% } else { %>
+                <%= exp.status %>
+                <% if(exp.status === 'Ativa' && exp.ate) { %>
+                  (até <%= exp.ate %>)
+                <% } %>
+              <% } %>
+            </td>
+          </tr>
+        <% }); %>
+      </tbody>
+    </table>
+  </div>
+  
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" 
+    crossorigin="anonymous">
+  </script>
+</body>
+</html>

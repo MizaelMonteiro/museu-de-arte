@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <title>Museu de Arte</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-
+          GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="/stylesheets/estilo-add.css">
+  <head>
+    <!-- Outras tags dentro de head-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+    <script>
+      $(document).ready(function () {
+        function getNacionalidade() { /* Função para obter as nacionalidades da rota*/
+          $.ajax({
+            url: "/nacionalidades/listar", /* Chamada da rota*/
+            type: "GET", /* Método usado pela rota*/
+            dataType: "json", /* Tipo de dado retornado pela rota*/
+            success: function (res) { /* Inclui os elementos do <select>*/
+              $("#inputNacionalidade").html("<option selected>(Informe)</option>");
+              $.each(res.resultado, function (key, value) {
+                $("#inputNacionalidade").append( /* Inclui os elementos vindos da rota */
+                  "<option value=" + value.IdNacionalidade + ">" + value.NoNacionalidade + "</option>"
+                );
+              });
+            },
+          });
+        }
+        function setNacionalidade() {
+          $.ajax({
+            success: function (res) {
+              let nacionalidade = $("#IdNacionalidade").val();
+              $("#inputNacionalidade option").each(function () {
+                if ($(this).val() == nacionalidade) {
+                  $("#inputNacionalidade option[value='" + nacionalidade + "']").attr('selected', 'selected');
+                }
+              });
+            },
+          });
+        }
+        getNacionalidade();
+        setNacionalidade();
+      });
+      function altera(IdAutor) {
+        $.ajax({
+          url: "/autores/edit/" + IdAutor,
+          type: "PUT",
+          data: "nome=" + $("#inputAutores").val() + "&nacionalidade=" + $("#inputNacionalidade").val(),
+          success: function () {
+            $(location).attr('href', '/autores/listar');
+            
+          }
+        });
+      }
+    </script>
+
+
+  </head>
+
+  <body>
+    <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+      <div class="container-fluid">
+        <a class="navbar-brand" aria-current="page" href="http://localhost:3000/introducao/introducao">Home</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbarNavDropdown"
+          aria-controls="navbarNavDropdown"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+          <ul class="navbar-nav">  <!-- Adicionando a <ul> correta -->
+            <li class="nav-item">
+              <a class="nav-link" href="#">Dados adicionais</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="http://localhost:3000/levantamentos/levantamentos">Levantamentos</a>
+            </li>
+            <li class="nav-item dropdown">
+              <a
+                class="nav-link dropdown-toggle"
+                href="#"
+                role="button"
+                data-bs-toggle="dropdown"
+                aria-expanded="false"
+              >
+                Consulta de dados
+              </a>
+              <ul class="dropdown-menu">
+                <li><a class="dropdown-item" href="http://localhost:3000/autores/listar">Autores</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Obras/listar">Obras</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Sessoes/Listar">Sessões</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Exposicoes/listar">Exposições</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Visitantes/listar">Visitantes</a></li>
+                <li><a class="dropdown-item" href="http://localhost:3000/Funcionarios/listar">Funcionários</a></li>
+              </ul>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <form method="post" action="/autores/add" class="row g-3">
+      <% if (resultado.IdAutor) {%>
+        <input type="hidden" id="IdNacionalidade" name="IdNacionalidade" value="<%= resultado.IdNacionalidade%>">
+        <h1>Alterar Autores</h1>
+        <form method="#" action="/autores/edit/<%= resultado.IdAutor%>" class="row g-3">
+      <%} else {%>
+        <h1>Cadastrar Autores</h1>
+        <form method="post" action="/autores/add" class="row g-3">
+      <%}%>
+      <div class="col-md-6">
+        <label for="inputNome" class="form-label">Autor</label>
+        <% if (resultado.IdAutor) {%>
+          <input type="text" class="form-control" id="inputAutores" name="nome" value="<%= resultado.NoAutor%>">
+        <%} else {%>
+          <input type="text" class="form-control" id="inputAutores" name="nome" placeholder="Nome">
+        <%}%>
+          
+      </div>
+      <div class="col-md-6">
+        <label for="inputNacionalidade" class="form-label">Nacionalidade</label>
+        <select id="inputNacionalidade" class="form-select" name="nacionalidade">
+          <option selected>(Informe)</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <% if (resultado.IdAutor) {%>
+          <button type="button" onclick="altera(<%= resultado.IdAutor%>);"
+            class="btn btn-primary">Salvar</button>
+        <%} else {%>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        <%}%>
+      </div>
+      </form>
+      <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" integrity="sha384-
+          w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" crossorigin="anonymous"></script>
+  </body>
+
+</html>

@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <title>Museu de Arte - Funcionários</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
+    crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" aria-current="page" href="http://localhost:3000/introducao/introducao">Home</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">  <!-- Adicionando a <ul> correta -->
+          <li class="nav-item">
+            <a class="nav-link" href="#">Dados adicionais</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://localhost:3000/levantamentos/levantamentos">Levantamentos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Consulta de dados
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="http://localhost:3000/autores/listar">Autores</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Obras/listar">Obras</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Sessoes/Listar">Sessões</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Exposicoes/listar">Exposições</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Visitantes/listar">Visitantes</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Funcionarios/listar">Funcionários</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container mt-5">
+    <% if (resultado.IdFuncionario) { %>
+      <input type="hidden" id="IdFuncionario" name="IdFuncionario" value="<%= resultado.IdFuncionario %>">
+      <h1>Alterar Funcionário</h1>
+      <!-- Formulário em modo edição: não usa submit convencional -->
+      <form id="formEdit" method="#" action="/funcionarios/edit/<%= resultado.IdFuncionario %>" class="row g-3">
+    <% } else { %>
+      <h1>Cadastrar Funcionário</h1>
+      <form method="post" action="/funcionarios/add" class="row g-3">
+    <% } %>
+      <div class="col-md-6">
+        <label for="inputNome" class="form-label">Nome do Funcionário</label>
+        <% if (resultado.IdFuncionario) { %>
+          <input type="text" class="form-control" id="inputNome" name="nome" value="<%= resultado.NoFuncionario %>">
+        <% } else { %>
+          <input type="text" class="form-control" id="inputNome" name="nome" placeholder="Nome do Funcionário">
+        <% } %>
+      </div>
+      <div class="col-md-6">
+        <label for="inputFuncao" class="form-label">Função</label>
+        <% if (resultado.IdFuncionario) { %>
+          <input type="text" class="form-control" id="inputFuncao" name="funcao" value="<%= resultado.Funcao %>">
+        <% } else { %>
+          <input type="text" class="form-control" id="inputFuncao" name="funcao" placeholder="Função desempenhada">
+        <% } %>
+      </div>
+      <div class="col-md-6">
+        <label for="inputDtContrato" class="form-label">Data de Contratação</label>
+        <% if (resultado.IdFuncionario) { %>
+          <input type="date" class="form-control" id="inputDtContrato" name="dtcontrato" value="<%= new Date(resultado.DataContratacao).toISOString().split('T')[0] %>">
+        <% } else { %>
+          <input type="date" class="form-control" id="inputDtContrato" name="dtcontrato">
+        <% } %>
+      </div>
+      <div class="col-md-6">
+        <label for="inputDtDemissao" class="form-label">Data de Demissão</label>
+        <% if (resultado.IdFuncionario) { %>
+          <input type="date" class="form-control" id="inputDtDemissao" name="dtdemissao" value="vazio">
+        <% } else { %>
+          <input type="date" class="form-control" id="inputDtDemissao" name="dtdemissao" value="vazio">
+
+        <% } %>
+      </div>
+      <div class="col-md-6">
+        <label for="inputSessao" class="form-label">Sessão em que trabalha</label>
+        <select id="inputSessao" class="form-select" name="sessao">
+          <option selected>(Informe)</option>
+        </select>
+      </div>
+      <div class="col-12">
+        <% if (resultado.IdFuncionario) { %>
+          <button type="button" onclick="alteraFuncionario(<%= resultado.IdFuncionario %>);" class="btn btn-primary">Salvar</button>
+        <% } else { %>
+          <button type="submit" class="btn btn-primary">Salvar</button>
+        <% } %>
+      </div>
+    </form>
+  </div>
+  
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" 
+    crossorigin="anonymous">
+  </script>
+  <script>
+    // Carrega as opções de Sessão via AJAX
+    function getSessao() {
+      $.ajax({
+        url: "/funcionarios/listardd",
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+          $("#inputSessao").html("<option selected>(Informe)</option>");
+          $.each(res.resultado, function (key, value) {
+            $("#inputSessao").append(
+              "<option value='" + value.IdSessao + "'>" + value.NoSessao + "</option>"
+            );
+          });
+          // Se estiver em modo edição, seleciona a sessão correta
+          <% if (resultado.IdFuncionario) { %>
+            $("#inputSessao").val("<%= resultado.IdSessao %>");
+          <% } %>
+        },
+        error: function(err){
+          console.error("Erro ao buscar sessões:", err);
+        }
+      });
+    }
+    $(document).ready(function () {
+      getSessao();
+    });
+    
+    // Função para editar o funcionário via AJAX
+    function alteraFuncionario(IdFuncionario) {
+      $.ajax({
+        url: "/funcionarios/edit/" + IdFuncionario,
+        type: "PUT",
+        data: "nome=" + $("#inputNome").val() +
+              "&funcao=" + $("#inputFuncao").val() +
+              "&dtcontrato=" + $("#inputDtContrato").val() +
+              "&dtdemissao=" + $("#inputDtDemissao").val() +
+              "&sessao=" + $("#inputSessao").val(),
+        success: function () {
+          window.location.href = '/funcionarios/listar';
+        },
+        error: function(err){
+          console.error("Erro ao editar funcionário:", err);
+        }
+      });
+    }
+  </script>
+</body>
+</html>

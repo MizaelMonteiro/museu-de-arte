@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <title>Museu de Arte - Visitantes</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link 
+    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" 
+    rel="stylesheet"
+    integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
+    crossorigin="anonymous">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
+    <div class="container-fluid">
+      <a class="navbar-brand" aria-current="page" href="http://localhost:3000/introducao/introducao">Home</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="navbarNavDropdown">
+        <ul class="navbar-nav">  <!-- Adicionando a <ul> correta -->
+          <li class="nav-item">
+            <a class="nav-link" href="#">Dados adicionais</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="http://localhost:3000/levantamentos/levantamentos">Levantamentos</a>
+          </li>
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Consulta de dados
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="http://localhost:3000/autores/listar">Autores</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Obras/listar">Obras</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Sessoes/Listar">Sessões</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Exposicoes/listar">Exposições</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Visitantes/listar">Visitantes</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Funcionarios/listar">Funcionários</a></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  
+  <div class="container mt-5">
+    <% if (resultado.IdVisitante) { %>
+      <input type="hidden" id="IdVisitante" name="IdVisitante" value="<%= resultado.IdVisitante %>">
+      <h1>Alterar Visitante</h1>
+      <form id="formEdit" method="#" action="/visitantes/edit/<%= resultado.IdVisitante %>" class="row g-3">
+        <div class="col-md-6">
+          <label for="inputNome" class="form-label">Nome do Visitante</label>
+          <input type="text" class="form-control" id="inputNome" name="nome" value="<%= resultado.NoVisitante %>">
+        </div>
+        <div class="col-md-6">
+          <label for="inputIdade" class="form-label">Idade do Visitante</label>
+          <input type="number" class="form-control" id="inputIdade" name="idade" value="<%= resultado.IdadeVisitante %>">
+        </div>
+        <div class="col-md-6">
+          <label for="inputSexo" class="form-label">Sexo</label>
+          <select id="inputSexo" class="form-select" name="sexo">
+            <option value="">(Informe)</option>
+            <option value="Masculino" <%= resultado.SexoVisitante === 'Masculino' ? 'selected' : '' %>>Masculino</option>
+            <option value="Feminino" <%= resultado.SexoVisitante === 'Feminino' ? 'selected' : '' %>>Feminino</option>
+            <option value="Outro" <%= resultado.SexoVisitante === 'Outro' ? 'selected' : '' %>>Outro</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="inputNacionalidade" class="form-label">Nacionalidade</label>
+          <select id="inputNacionalidade" class="form-select" name="nacionalidade">
+            <option selected>(Informe)</option>
+          </select>
+        </div>
+        <!-- Se for edição, não fazemos cadastro da visita -->
+        <% } else { %>
+      <h1>Cadastrar Visitante</h1>
+      <form id="formAdd" method="#" class="row g-3">
+        <div class="col-md-6">
+          <label for="inputNome" class="form-label">Nome do Visitante</label>
+          <input type="text" class="form-control" id="inputNome" name="nome" placeholder="Nome do Visitante">
+        </div>
+        <div class="col-md-6">
+          <label for="inputIdade" class="form-label">Idade do Visitante</label>
+          <input type="number" class="form-control" id="inputIdade" name="idade" placeholder="Idade do Visitante">
+        </div>
+        <div class="col-md-6">
+          <label for="inputSexo" class="form-label">Sexo</label>
+          <select id="inputSexo" class="form-select" name="sexo">
+            <option value="">(Informe)</option>
+            <option value="Masculino">Masculino</option>
+            <option value="Feminino">Feminino</option>
+            <option value="Outro">Outro</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="inputNacionalidade" class="form-label">Nacionalidade</label>
+          <select id="inputNacionalidade" class="form-select" name="nacionalidade">
+            <option selected>(Informe)</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="inputExposicao" class="form-label">Exposição frequentada</label>
+          <select id="inputExposicao" class="form-select" name="exposicao">
+            <option selected>(Informe)</option>
+          </select>
+        </div>
+        <div class="col-md-6">
+          <label for="inputDataVisita" class="form-label">Data da Visita</label>
+          <input type="date" class="form-control" id="inputDataVisita" name="datavisita">
+        </div>
+        <div class="col-12">
+          <button type="button" class="btn btn-primary" onclick="adicionaVisitante()">Salvar</button>
+        </div>
+      </form>
+    <% } %>
+  </div>
+  
+  <script 
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js" 
+    integrity="sha384-w76AqPfDkMBDXo30jS1Sgez6pr3x5MlQ1ZAGC+nuZB+EYdgRZgiwxhTBTkF7CXvN" 
+    crossorigin="anonymous">
+  </script>
+  <script>
+    // Carrega as nacionalidades via AJAX (rota /nacionalidades/listar deve existir)
+    function getNacionalidade() {
+      $.ajax({
+        url: "/nacionalidades/listar",
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+          $("#inputNacionalidade").html("<option selected>(Informe)</option>");
+          $.each(res.resultado, function (key, value) {
+            $("#inputNacionalidade").append(
+              "<option value='" + value.IdNacionalidade + "'>" + value.NoNacionalidade + "</option>"
+            );
+          });
+        },
+        error: function(err){
+          console.error("Erro ao buscar nacionalidades:", err);
+        }
+      });
+    }
+
+    // Carrega as exposições via AJAX
+    function getExposicoes() {
+      $.ajax({
+        url: "/visitantes/listexposicoes",
+        type: "GET",
+        dataType: "json",
+        success: function (res) {
+          $("#inputExposicao").html("<option selected>(Informe)</option>");
+          $.each(res.resultado, function (key, value) {
+            $("#inputExposicao").append(
+              "<option value='" + value.IdExposicao + "'>" + value.TituloExposicao + "</option>"
+            );
+          });
+        },
+        error: function(err){
+          console.error("Erro ao buscar exposições:", err);
+        }
+      });
+    }
+
+    // Função para adicionar visitante via AJAX (POST /visitantes/add)
+    function adicionaVisitante() {
+      const nome = $("#inputNome").val();
+      const idade = $("#inputIdade").val();
+      const sexo = $("#inputSexo").val();
+      const nacionalidade = $("#inputNacionalidade").val();
+      const exposicao = $("#inputExposicao").val();
+      const datavisita = $("#inputDataVisita").val();
+
+      $.ajax({
+        url: "/visitantes/add",
+        type: "POST",
+        data: {
+          nome: nome,
+          idade: idade,
+          sexo: sexo,
+          nacionalidade: nacionalidade,
+          exposicao: exposicao,
+          datavisita: datavisita
+        },
+        success: function (res) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Sucesso',
+            text: res.message
+          }).then(() => {
+            window.location.href = '/visitantes/listar';
+          });
+        },
+        error: function(xhr) {
+          if (xhr.responseJSON && xhr.responseJSON.message) {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: xhr.responseJSON.message
+            });
+          } else {
+            Swal.fire({
+              icon: 'error',
+              title: 'Erro',
+              text: 'Ocorreu um erro ao cadastrar o visitante.'
+            });
+          }
+        }
+      });
+    }
+    
+    // Ao carregar a página, buscar nacionalidades e exposições
+    $(document).ready(function () {
+      getNacionalidade();
+      getExposicoes();
+    });
+  </script>
+</body>
+</html>
