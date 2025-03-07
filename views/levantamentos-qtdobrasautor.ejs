@@ -13,18 +13,42 @@
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Início</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-              data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" 
-              aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" aria-current="page" href="http://localhost:3000/introducao/introducao">Home</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav">  <!-- Adicionando a <ul> correta -->
           <li class="nav-item">
-            <a class="nav-link active" href="#">Total de Obras por Autor</a>
+            <a class="nav-link" href="http://localhost:3000/levantamentos/levantamentos">Levantamentos</a>
           </li>
-          <!-- Outras opções, se necessário -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Consulta de dados
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="http://localhost:3000/autores/listar">Autores</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Obras/listar">Obras</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Sessoes/Listar">Sessões</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Exposicoes/listar">Exposições</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Visitantes/listar">Visitantes</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Funcionarios/listar">Funcionários</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>

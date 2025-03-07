@@ -93,7 +93,7 @@ router.delete('/delete/:id', function (req, res) {
           // Verifica se o erro é de chave estrangeira
           if (erro.code === 'ER_ROW_IS_REFERENCED_2') {
             return res.status(400).json({ 
-              message: 'Não é possível excluir esta informação, pois ela é necessária em outra tabela-------------------.' 
+              message: 'Não é possível excluir esta informação, pois ela é necessária em outra tabela.' 
             });
           }
           return res.status(500).json({ message: 'Erro ao excluir informação.' });

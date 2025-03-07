@@ -1,0 +1,78 @@
+/* estilo-levantamentos.css */
+
+/* Estilização geral do corpo */
+body {
+    background-color: #f5f5f5;
+    font-family: 'Arial', sans-serif;
+    color: #333;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Espaçamento para compensar a navbar fixa */
+  h1.text-center, h5.text-center {
+    margin-top: 100px;  /* ajusta conforme necessário */
+  }
+  
+  /* Centraliza e ajusta os títulos */
+  h1.text-center {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 20px;
+  }
+  
+  h5.text-center {
+    font-size: 1.25rem;
+    color: #34495e;
+    margin-bottom: 40px;
+  }
+  
+  /* Container centralizado e com largura máxima */
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  /* Estilo do accordion */
+  .accordion.accordion-flush {
+    background-color: #ffffff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.1);
+    margin-bottom: 40px;
+  }
+  
+  .accordion-item {
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .accordion-item:last-child {
+    border-bottom: none;
+  }
+  
+  /* Botões do accordion */
+  .accordion-button {
+    background-color: #e9ecef;
+    color: #2c3e50;
+    font-weight: bold;
+  }
+  
+  .accordion-button:not(.collapsed) {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  /* Corpo do accordion */
+  .accordion-body {
+    background-color: #fff;
+    color: #555;
+    font-size: 1rem;
+    padding: 1rem;
+  }
+  
+  /* Ajustes opcionais para a navbar */
+  .navbar {
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+  

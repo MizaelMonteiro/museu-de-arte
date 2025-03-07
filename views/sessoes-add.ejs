@@ -10,22 +10,120 @@
     integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" 
     crossorigin="anonymous">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.3/jquery.min.js"></script>
+
+
+  <script>
+    $(document).ready(function () {
+      function getExposicao() {
+        $.ajax({
+          url: "/exposicoes/listardd",
+          type: "GET",
+          dataType: "json",
+          success: function (res) {
+            $("#inputExposicao").html("<option selected>(Informe)</option>");
+            $.each(res.resultado, function (key, value) {
+              $("#inputExposicao").append(
+                "<option value='" + value.IdExposicao  + "'>" + value.TituloExposicao + "</option>"
+              );
+            });
+          },
+          error: function(err){
+            console.error("Erro ao buscar exposicoes:", err);
+          }
+        });
+      }
+
+      
+      function setExposicao() {
+        $.ajax({
+          success: function (res) {
+            let exposicao = $("#IdAutor").val();
+            $("#inputExposicao option").each(function () {
+              if ($(this).val() == exposicao) {
+                $("#inputExposicao option[value='" + exposicao + "']").attr('selected', 'selected');
+              }
+            });
+          },
+        });
+      }
+
+      
+
+
+      getExposicao();
+      setExposicao();
+
+    });
+
+    // Função para editar a obra via AJAX (para modo de edição)
+    function altera(IdObra) {
+      
+      $.ajax({
+        url: "/obras/edit/" + IdObra,
+        type: "PUT",
+        data: "Titulo=" + $("#inputTitulo").val() + "&local=" + $("#inputLocal").val() + "&Ano=" + $("#inputAno").val() + "&autor=" + $("#inputAutor").val() + "&sessao=" + $("#inputSessao").val() ,
+        success: function () {
+          $(location).attr('href', '/obras/listar');  
+        }
+      });
+     
+    }
+
+
+    function altera(IdSessao) {
+        
+        $.ajax({
+          url: "/sessoes/edit/" + IdSessao,
+          type: "PUT",
+          data: "nome=" + $("#inputNome").val() + "&local=" + $("#inputLocal").val() + "&exposicao=" + $("#inputExposicao").val(),
+          success: function () {
+            $(location).attr('href', '/sessoes/listar');  
+          }
+        });
+       
+      }
+  </script>
+
 </head>
 <body>
   <nav class="navbar navbar-expand-lg bg-body-tertiary fixed-top">
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">Início</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" 
-              data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" 
-              aria-expanded="false" aria-label="Toggle navigation">
+      <a class="navbar-brand" aria-current="page" href="http://localhost:3000/introducao/introducao">Home</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navbarNavDropdown"
+        aria-controls="navbarNavDropdown"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+        <ul class="navbar-nav">  <!-- Adicionando a <ul> correta -->
           <li class="nav-item">
-            <a class="nav-link active" href="#">Sessões</a>
+            <a class="nav-link" href="http://localhost:3000/levantamentos/levantamentos">Levantamentos</a>
           </li>
-          <!-- Outras opções, se necessário -->
+          <li class="nav-item dropdown">
+            <a
+              class="nav-link dropdown-toggle"
+              href="#"
+              role="button"
+              data-bs-toggle="dropdown"
+              aria-expanded="false"
+            >
+              Consulta de dados
+            </a>
+            <ul class="dropdown-menu">
+              <li><a class="dropdown-item" href="http://localhost:3000/autores/listar">Autores</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Obras/listar">Obras</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Sessoes/Listar">Sessões</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Exposicoes/listar">Exposições</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Visitantes/listar">Visitantes</a></li>
+              <li><a class="dropdown-item" href="http://localhost:3000/Funcionarios/listar">Funcionários</a></li>
+            </ul>
+          </li>
         </ul>
       </div>
     </div>
@@ -66,7 +164,7 @@
       <!-- Note que removemos o campo de quantidade de obras -->
       <div class="col-12">
         <% if (resultado.IdSessao) { %>
-          <button type="button" onclick="alteraSessao(<%= resultado.IdSessao %>);" class="btn btn-primary">Salvar</button>
+          <button type="button" onclick="altera(<%= resultado.IdSessao %>);" class="btn btn-primary">Salvar</button>
         <% } else { %>
           <button type="submit" class="btn btn-primary">Salvar</button>
         <% } %>
