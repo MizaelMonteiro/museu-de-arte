@@ -32,3 +32,4 @@ Também é necessário baixar os seguintes arquivos do projeto:
 2. Descompactar o arquivo `museudearte.zip`.
 3. Abrir a pasta do projeto no **VS Code**.
 4. Criar um novo terminal e executar o comando `npm start`
+5. Acessar `http://localhost:3000/introducao/introducao`
